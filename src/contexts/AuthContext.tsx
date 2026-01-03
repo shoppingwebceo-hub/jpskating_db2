@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (session?.user) {
         try {
           console.log("[AUTH] Fetching profile for user:", session.user.id);
-          const profile = await profileService.getById(session.user.id);
+          const profile = await fetchProfileWithTimeout(session.user.id, 3000);
 
           console.log("[AUTH] Profile loaded:", profile);
           setUser({
@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       subscription?.unsubscribe();
     };
-  }, [checkAuth]);
+  }, [checkAuth, fetchProfileWithTimeout]);
 
   const login = async (email: string, password: string) => {
     console.log("[AUTH] Login attempt with email:", email);
