@@ -11,8 +11,15 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 
 const CartDrawer = () => {
+  const navigate = useNavigate();
   const { items, itemCount, total, isOpen, setIsOpen, removeItem, updateQuantity, clearCart } = useCart();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+
+  const handleProceedCheckout = () => {
+    setIsCheckingOut(true);
+    setIsOpen(false);
+    navigate('/checkout');
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
