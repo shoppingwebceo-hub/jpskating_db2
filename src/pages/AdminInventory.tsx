@@ -292,13 +292,51 @@ export default function AdminInventory() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Image URL</label>
-                  <Input
-                    value={formData.image_url}
-                    onChange={(e) =>
-                      setFormData({ ...formData, image_url: e.target.value })
-                    }
-                  />
+                  <label className="text-sm font-medium">Product Image</label>
+                  <div className="space-y-3">
+                    {/* Image Preview */}
+                    {previewUrl && (
+                      <div className="relative w-full h-48 border rounded-lg overflow-hidden bg-gray-100">
+                        <img
+                          src={previewUrl}
+                          alt="Product preview"
+                          className="w-full h-full object-cover"
+                        />
+                        {selectedFile && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedFile(null);
+                              setPreviewUrl(formData.image_url || "");
+                            }}
+                            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded hover:bg-red-600"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    {/* File Upload Input */}
+                    <div className="flex items-center justify-center w-full border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-gray-400 transition-colors">
+                      <label className="w-full cursor-pointer flex flex-col items-center justify-center">
+                        <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                        <span className="text-sm font-medium text-gray-700">
+                          Click to upload image
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          JPG, PNG or WebP (Max 5MB)
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileSelect}
+                          className="hidden"
+                          disabled={isUploading}
+                        />
+                      </label>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex gap-2 pt-4">
