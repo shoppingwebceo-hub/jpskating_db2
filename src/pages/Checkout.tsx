@@ -127,6 +127,13 @@ export default function Checkout() {
         return;
       }
 
+      // Validate that a payment method is selected
+      if (!formData.paymentMethod || paymentMethods.length === 0) {
+        toast.error("No payment methods available. Please contact support.");
+        setIsProcessing(false);
+        return;
+      }
+
       // Create order
       const orderNumber = `ORD-${Date.now()}`;
       const order = await orderService.create({
@@ -134,7 +141,7 @@ export default function Checkout() {
         order_number: orderNumber,
         status: "pending",
         total_amount: total,
-        payment_method: "payu",
+        payment_method: formData.paymentMethod,
         payment_status: "pending",
         shipping_address: {
           name: formData.fullName,
