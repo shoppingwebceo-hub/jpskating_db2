@@ -84,6 +84,14 @@ const App = () => (
                 }
               />
               <Route
+                path="/admin/payment-options"
+                element={
+                  <ProtectedAdminRoute>
+                    <AdminPaymentOptions />
+                  </ProtectedAdminRoute>
+                }
+              />
+              <Route
                 path="/admin/memberships"
                 element={
                   <ProtectedAdminRoute>
