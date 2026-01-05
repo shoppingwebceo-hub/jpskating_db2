@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ShoppingCart, Snowflake, User, LogOut } from "lucide-react";
+import { Menu, X, ShoppingCart, Snowflake, User, LogOut, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -98,6 +98,13 @@ const Navbar = () => {
                     {user?.email}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/orders" className="flex items-center cursor-pointer">
+                      <Package className="w-4 h-4 mr-2" />
+                      My Orders
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleLogout} className="text-destructive">
                     <LogOut className="w-4 h-4 mr-2" />
                     Logout
@@ -153,14 +160,22 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              <div className="flex items-center gap-2 px-4 pt-4 border-t border-border/20 mt-2">
+              <div className="flex flex-col gap-2 px-4 pt-4 border-t border-border/20 mt-2">
                 {isAuthenticated ? (
-                  <Button variant="outline" className="flex-1" onClick={handleLogout}>
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Logout
-                  </Button>
+                  <>
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link to="/orders" onClick={() => setIsOpen(false)}>
+                        <Package className="w-4 h-4 mr-2" />
+                        My Orders
+                      </Link>
+                    </Button>
+                    <Button variant="outline" className="w-full" onClick={handleLogout}>
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Logout
+                    </Button>
+                  </>
                 ) : (
-                  <Button variant="gold" className="flex-1" asChild>
+                  <Button variant="gold" className="w-full" asChild>
                     <Link to="/auth" onClick={() => setIsOpen(false)}>
                       Sign In
                     </Link>
