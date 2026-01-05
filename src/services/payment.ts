@@ -158,15 +158,47 @@ export const paymentService = {
     }
   },
 
-  async verifyPayment(txnid: string, payuResponse: any): Promise<PaymentResponse> {
+  async verifyPayment(
+    txnid: string,
+    payuResponse: any,
+    merchantKey?: string,
+    merchantSalt?: string
+  ): Promise<PaymentResponse> {
     try {
+      // Use provided credentials or fetch from database
+      let key = merchantKey || DEFAULT_PAYU_KEY;
+      let salt = merchantSalt || DEFAULT_PAYU_SALT;
+
+      // If credentials are not provided, fetch from transaction
+      if (!merchantKey || !merchantSalt) {
+        try {
+          const { data: transaction } = await supabase
+            .from("payment_transactions")
+            .select("*")
+            .eq("transaction_id", txnid)
+            .single();
+
+          if (transaction && transaction.payu_response?.provider) {
+            const paymentOption = await paymentOptionsService.getByProvider(
+              transaction.payu_response.provider
+            );
+            key = paymentOption.merchant_key;
+            salt = paymentOption.merchant_salt || DEFAULT_PAYU_SALT;
+          }
+        } catch (error) {
+          console.warn("Could not fetch payment option for verification");
+        }
+      }
+
       // Verify hash from PayU response
       const verifyHash = await generateHash(
         txnid,
         payuResponse.amount,
         payuResponse.productinfo,
         payuResponse.firstname,
-        payuResponse.email
+        payuResponse.email,
+        key,
+        salt
       );
 
       if (verifyHash !== payuResponse.hash) {
