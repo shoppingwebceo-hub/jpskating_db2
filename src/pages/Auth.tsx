@@ -58,7 +58,7 @@ const Auth = () => {
             <Trophy className="w-7 h-7 text-accent-foreground" />
           </div>
           <span className="text-2xl font-bold text-primary-foreground tracking-tight">
-            FIFA<span className="text-accent">Zone</span>
+            JP<span className="text-accent">Skating</span>
           </span>
         </Link>
 
